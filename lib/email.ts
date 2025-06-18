@@ -119,7 +119,7 @@ export async function sendQuizResults(
   try {
     const result = await apiInstance.sendTransacEmail(sendSmtpEmail);
     console.log('Email sent successfully:', result);
-    return { success: true, messageId: result.messageId };
+    return { success: true, messageId: (result as any).messageId || 'unknown' };
   } catch (error) {
     console.error('Email sending failed:', error);
     throw error;

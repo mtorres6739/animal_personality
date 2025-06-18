@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { updateQuizResultWithEmail, getQuizResultBySessionId, initDatabase } from '@/lib/database';
 import { sendQuizResults } from '@/lib/email';
-import { animalArchetypes } from '@/lib/quiz-data';
+import { animalArchetypes, AnimalType } from '@/lib/quiz-data';
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     const quizResult = await getQuizResultBySessionId(sessionId);
     
     if (quizResult) {
-      const animalData = animalArchetypes[quizResult.animal_type];
+      const animalData = animalArchetypes[quizResult.animal_type as AnimalType];
       const selectedTraits = quizResult.selected_traits;
       
       // Send actual email with results

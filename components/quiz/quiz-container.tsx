@@ -269,7 +269,7 @@ export default function QuizContainer() {
               />
             )}
             {currentStep === 'thank-you' && (
-              <ThankYouStep onRestart={handleRestart} animalType={animalResult} />
+              <ThankYouStep onRestart={handleRestart} animalType={animalResult || undefined} />
             )}
           </CardContent>
         </Card>

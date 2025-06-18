@@ -445,7 +445,7 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
               <Percent className="h-6 w-6 text-blue-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-blue-700">
                 {cohortData.distributions && cohortData.distributions.length > 0 
-                  ? (cohortData.distributions.find(d => d.animal === animalType)?.percentage || 0)
+                  ? (cohortData.distributions.find((d: any) => d.animal === animalType)?.percentage || 0)
                   : 100}%
               </div>
               <div className="text-sm text-blue-600">Share Your Type</div>
@@ -454,8 +454,8 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
 
           <div className="space-y-3">
             <h4 className="font-medium text-blue-700 mb-3">Group Distribution:</h4>
-            {cohortData.distributions && cohortData.distributions.length > 0 ? cohortData.distributions.map((dist, index) => {
-              const animalData = animalArchetypes[dist.animal];
+            {cohortData.distributions && cohortData.distributions.length > 0 ? cohortData.distributions.map((dist: any, index: number) => {
+              const animalData = animalArchetypes[dist.animal as AnimalType];
               const isUserType = dist.animal === animalType;
               
               return (
@@ -520,7 +520,7 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
                  cohortData.distributions[0].animal === 'fox' ? 'innovation-driven' :
                  cohortData.distributions[0].animal === 'tortoise' ? 'methodical' :
                  cohortData.distributions[0].animal === 'owl' ? 'analytical' : 'results-driven'} culture with{' '}
-                <strong>{cohortData.distributions[0].percentage}% {animalArchetypes[cohortData.distributions[0].animal].name}s</strong> leading the way.
+                <strong>{cohortData.distributions[0].percentage}% {animalArchetypes[cohortData.distributions[0].animal as AnimalType].name}s</strong> leading the way.
               </p>
             </div>
           )}
