@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { quizTraits } from '@/lib/quiz-data';
-import { CheckCircle, Circle, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { TraitCard } from '@/components/ui/trait-card';
 
 interface TraitsStepProps {
   onSubmit: (traits: string[]) => void;
@@ -13,8 +14,8 @@ interface TraitsStepProps {
 
 export default function TraitsStep({ onSubmit, initialTraits = [] }: TraitsStepProps) {
   const [selectedTraits, setSelectedTraits] = useState<string[]>(initialTraits);
-  const minTraits = 8;
-  const maxTraits = 12;
+  const minTraits = 10;
+  const maxTraits = 10;
 
   const toggleTrait = (trait: string) => {
     if (selectedTraits.includes(trait)) {
@@ -30,7 +31,7 @@ export default function TraitsStep({ onSubmit, initialTraits = [] }: TraitsStepP
     }
   };
 
-  const canProceed = selectedTraits.length >= minTraits;
+  const canProceed = selectedTraits.length === minTraits;
   const isAtMax = selectedTraits.length >= maxTraits;
 
   return (
@@ -45,15 +46,15 @@ export default function TraitsStep({ onSubmit, initialTraits = [] }: TraitsStepP
             Select Your Top Traits
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Choose {minTraits}-{maxTraits} traits that best describe your personality and work style.
+            Choose exactly {minTraits} traits that best describe your personality and work style.
           </p>
           <div className="mt-4 flex items-center justify-center gap-4">
             <div className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedTraits.length >= minTraits 
+              selectedTraits.length === minTraits 
                 ? 'bg-green-100 text-green-700' 
                 : 'bg-orange-100 text-orange-700'
             }`}>
-              {selectedTraits.length} of {minTraits}-{maxTraits} selected
+              {selectedTraits.length} of {minTraits} selected
             </div>
             {isAtMax && (
               <div className="text-sm text-amber-600 font-medium">
@@ -70,53 +71,21 @@ export default function TraitsStep({ onSubmit, initialTraits = [] }: TraitsStepP
         transition={{ delay: 0.3 }}
         className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"
       >
-        <AnimatePresence>
-          {quizTraits.map((trait, index) => {
-            const isSelected = selectedTraits.includes(trait);
-            const isDisabled = !isSelected && isAtMax;
-            
-            return (
-              <motion.button
-                key={trait}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.02 }}
-                onClick={() => !isDisabled && toggleTrait(trait)}
-                disabled={isDisabled}
-                className={`
-                  p-3 rounded-xl text-sm font-medium transition-all duration-200 text-left
-                  border-2 relative overflow-hidden
-                  ${isSelected
-                    ? 'bg-violet-100 border-violet-300 text-violet-800 shadow-md scale-105'
-                    : isDisabled
-                    ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
-                    : 'bg-white border-gray-200 text-gray-700 hover:border-violet-200 hover:bg-violet-50 hover:scale-102'
-                  }
-                `}
-                whileHover={!isDisabled ? { y: -2 } : {}}
-                whileTap={!isDisabled ? { scale: 0.98 } : {}}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="flex-1">{trait}</span>
-                  {isSelected ? (
-                    <CheckCircle className="h-4 w-4 text-violet-600 ml-2 flex-shrink-0" />
-                  ) : (
-                    <Circle className="h-4 w-4 text-gray-400 ml-2 flex-shrink-0" />
-                  )}
-                </div>
-                
-                {isSelected && (
-                  <motion.div
-                    layoutId="selected-bg"
-                    className="absolute inset-0 bg-gradient-to-r from-violet-100 to-indigo-100 rounded-xl -z-10"
-                    initial={false}
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-              </motion.button>
-            );
-          })}
-        </AnimatePresence>
+        {quizTraits.map((trait, index) => {
+          const isSelected = selectedTraits.includes(trait);
+          const isDisabled = !isSelected && isAtMax;
+          
+          return (
+            <TraitCard
+              key={trait}
+              trait={trait}
+              isSelected={isSelected}
+              isDisabled={isDisabled}
+              onClick={() => toggleTrait(trait)}
+              index={index}
+            />
+          );
+        })}
       </motion.div>
 
       <motion.div
@@ -148,7 +117,7 @@ export default function TraitsStep({ onSubmit, initialTraits = [] }: TraitsStepP
           animate={{ opacity: 1 }}
           className="text-center text-sm text-muted-foreground"
         >
-          Please select at least {minTraits} traits to continue
+          Please select exactly {minTraits} traits to continue
         </motion.p>
       )}
     </div>

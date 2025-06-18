@@ -1,29 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { QRCodeDialog } from '@/components/ui/qr-code-dialog';
+import { Typewriter } from '@/components/ui/typewriter';
 import { Sparkles, Heart, Brain, Users, Users2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { animalArchetypes, AnimalType } from '@/lib/quiz-data';
 
 interface WelcomeStepProps {
   onStart: (cohortId?: string) => void;
 }
 
-const animals = [
-  { emoji: '🦊', name: 'Fox', delay: 0.1 },
-  { emoji: '🐬', name: 'Dolphin', delay: 0.2 },
-  { emoji: '🐢', name: 'Tortoise', delay: 0.3 },
-  { emoji: '🐅', name: 'Tiger', delay: 0.4 },
-  { emoji: '🦉', name: 'Owl', delay: 0.5 },
-  { emoji: '🦈', name: 'Shark', delay: 0.6 },
-];
+const animalOrder: AnimalType[] = ['fox', 'dolphin', 'tortoise', 'tiger', 'owl', 'shark'];
+
+const animals = animalOrder.map((type, index) => ({
+  ...animalArchetypes[type],
+  delay: 0.1 + index * 0.1
+}));
 
 export default function WelcomeStep({ onStart }: WelcomeStepProps) {
   const [cohortId, setCohortId] = useState('');
   const [showCohortInput, setShowCohortInput] = useState(false);
+  const [currentAnimalIndex, setCurrentAnimalIndex] = useState(0);
+
+  // Sync with typewriter cycling
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentAnimalIndex((prev) => (prev + 1) % animals.length);
+    }, 4000); // Match typewriter timing (3000ms wait + 1000ms for typing)
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const handleStart = () => {
     onStart(cohortId.trim() || undefined);
@@ -38,37 +48,132 @@ export default function WelcomeStep({ onStart }: WelcomeStepProps) {
           transition={{ duration: 0.5 }}
           className="mb-6"
         >
-          <div className="relative mb-8">
-            <div className="bg-gradient-to-br from-violet-100 to-indigo-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Sparkles className="h-12 w-12 text-violet-600" />
+          {/* Animal Collage Hero */}
+          <div className="relative mb-12">
+            {/* Main collage grid */}
+            <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
+              {animals.map((animal, index) => {
+                const isActive = index === currentAnimalIndex;
+                return (
+                  <motion.div
+                    key={animal.id}
+                    className={`relative aspect-square rounded-2xl overflow-hidden border-4 transition-all duration-500 ${
+                      isActive 
+                        ? 'border-violet-400 shadow-2xl shadow-violet-300/50 scale-105' 
+                        : 'border-gray-200 shadow-lg'
+                    }`}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ 
+                      opacity: 1, 
+                      scale: isActive ? 1.05 : 1,
+                      rotate: isActive ? [0, 2, 0] : 0
+                    }}
+                    transition={{ 
+                      delay: animal.delay,
+                      duration: 0.6,
+                      rotate: { duration: 2, repeat: isActive ? Infinity : 0 }
+                    }}
+                  >
+                    {/* Background gradient */}
+                    <div className={`absolute inset-0 bg-gradient-to-br transition-all duration-500 ${
+                      isActive 
+                        ? 'from-violet-400 via-purple-400 to-indigo-400' 
+                        : 'from-violet-100 via-purple-100 to-indigo-100'
+                    }`} />
+                    
+                    {/* Animal emoji */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <motion.div 
+                        className={`text-6xl transition-all duration-500 ${
+                          isActive ? 'scale-110' : 'scale-100'
+                        }`}
+                        animate={isActive ? { 
+                          y: [0, -5, 0],
+                          rotateY: [0, 10, 0]
+                        } : {}}
+                        transition={{ 
+                          duration: 2,
+                          repeat: isActive ? Infinity : 0,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        {animal.emoji}
+                      </motion.div>
+                    </div>
+                    
+                    {/* Animal name */}
+                    <div className="absolute bottom-2 left-2 right-2">
+                      <div className={`text-center text-xs font-semibold px-2 py-1 rounded-full transition-all duration-500 ${
+                        isActive 
+                          ? 'bg-white/90 text-violet-700' 
+                          : 'bg-white/70 text-gray-600'
+                      }`}>
+                        {animal.name}
+                      </div>
+                    </div>
+                    
+                    {/* Active indicator */}
+                    {isActive && (
+                      <motion.div
+                        className="absolute -top-2 -right-2 w-6 h-6 bg-violet-500 rounded-full flex items-center justify-center"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      >
+                        <Sparkles className="h-3 w-3 text-white" />
+                      </motion.div>
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
             
-            {/* Floating animal emojis */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              {animals.map((animal, index) => (
-                <motion.div
-                  key={animal.name}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: animal.delay, duration: 0.3 }}
-                  className={`absolute text-2xl`}
-                  style={{
-                    transform: `rotate(${index * 60}deg) translateY(-80px) rotate(-${index * 60}deg)`
-                  }}
-                >
-                  {animal.emoji}
-                </motion.div>
-              ))}
-            </div>
+            {/* Floating decorative elements */}
+            <motion.div
+              className="absolute -top-6 left-10 text-2xl opacity-30"
+              animate={{ y: [-5, 5, -5], rotate: [-10, 10, -10] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              ✨
+            </motion.div>
+            <motion.div
+              className="absolute -bottom-6 right-10 text-2xl opacity-30"
+              animate={{ y: [5, -5, 5], rotate: [10, -10, 10] }}
+              transition={{ duration: 3.5, repeat: Infinity }}
+            >
+              🌟
+            </motion.div>
           </div>
           
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 text-transparent bg-clip-text mb-4">
+          <motion.h2 
+            className="text-5xl font-bold bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-transparent bg-clip-text mb-4"
+            animate={{ 
+              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+            }}
+            transition={{ 
+              duration: 5,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{ backgroundSize: "200% 200%" }}
+          >
             Discover Your Animal Personality
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
-            Unlock the secrets of your personality through the wisdom of animal archetypes. 
-            This scientifically-inspired quiz reveals your inner nature and how you connect with the world.
-          </p>
+          </motion.h2>
+          <div className="text-muted-foreground text-xl max-w-3xl mx-auto leading-relaxed h-20 flex items-center justify-center">
+            <div className="text-center">
+              <span className="text-gray-600">Are you </span>
+              <Typewriter
+                text={animals.map(animal => `${animal.emoji} ${animal.title}`)}
+                speed={60}
+                deleteSpeed={30}
+                waitTime={3000}
+                className="text-violet-600 font-semibold"
+                cursorChar="|"
+                cursorClassName="text-violet-400 ml-1"
+              />
+              <span className="text-gray-600">?</span>
+            </div>
+          </div>
         </motion.div>
       </div>
 

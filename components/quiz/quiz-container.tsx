@@ -49,22 +49,97 @@ export default function QuizContainer() {
     setSelectedTraits(traits);
     const result = determineAnimalType(traits);
     setAnimalResult(result);
-    setCurrentStep('results');
+    
+    console.log('Saving quiz results (without email):', {
+      traits,
+      result,
+      cohortId,
+      sessionId
+    });
+    
+    try {
+      // Save quiz results to database (without email)
+      const response = await fetch('/api/save-quiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          selectedTraits: traits,
+          animalResult: result,
+          cohortId: cohortId || undefined,
+          sessionId,
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Quiz save response:', data);
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to save quiz results');
+      }
+
+      console.log('Quiz results saved successfully, proceeding to results page');
+      setCurrentStep('results');
+      
+    } catch (error) {
+      console.error('Error saving quiz results:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save quiz results. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleResultsSubmit = async (email: string): Promise<void> => {
     setEmail(email);
     
-    // Simulate email sending (since we don't have real API routes yet)
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: 'Success!',
-      description: 'Your results have been sent to your email.',
-      variant: 'default',
+    console.log('Submitting email for session:', {
+      email,
+      sessionId
     });
     
-    setCurrentStep('thank-you');
+    try {
+      const payload = {
+        email,
+        sessionId,
+      };
+      
+      console.log('Email API payload:', payload);
+      
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      console.log('Email API response status:', response.status);
+      
+      const data = await response.json();
+      console.log('Email API response data:', data);
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit email');
+      }
+
+      toast({
+        title: 'Success!',
+        description: 'Your email has been saved and results sent to you.',
+        variant: 'default',
+      });
+      
+      setCurrentStep('thank-you');
+    } catch (error) {
+      console.error('Error submitting email:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save email. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleRestart = () => {
@@ -194,7 +269,7 @@ export default function QuizContainer() {
               />
             )}
             {currentStep === 'thank-you' && (
-              <ThankYouStep onRestart={handleRestart} />
+              <ThankYouStep onRestart={handleRestart} animalType={animalResult} />
             )}
           </CardContent>
         </Card>

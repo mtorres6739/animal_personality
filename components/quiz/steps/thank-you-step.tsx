@@ -2,13 +2,60 @@
 
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { CheckCircle, RefreshCw, Mail, Share2, Heart } from 'lucide-react';
+import { CheckCircle, RefreshCw, Mail, Share2, Heart, Twitter, Facebook, Linkedin, Copy, Check } from 'lucide-react';
+import { useState } from 'react';
+import { AnimalType, animalArchetypes } from '@/lib/quiz-data';
 
 interface ThankYouStepProps {
   onRestart: () => void;
+  animalType?: AnimalType;
 }
 
-export default function ThankYouStep({ onRestart }: ThankYouStepProps) {
+export default function ThankYouStep({ onRestart, animalType }: ThankYouStepProps) {
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const animal = animalType ? animalArchetypes[animalType] : null;
+
+  const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://animalquiz.com';
+  
+  const socialCaptions = animal ? [
+    {
+      platform: 'Twitter',
+      icon: Twitter,
+      color: 'text-blue-400',
+      bgColor: 'bg-blue-50',
+      borderColor: 'border-blue-100',
+      caption: `Just discovered I'm ${animal.title} ${animal.emoji} on the Animal Personality Quiz! ${animal.description} Take the quiz to find your spirit animal: ${shareUrl} #PersonalityQuiz #${animal.name}Personality`,
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just discovered I'm ${animal.title} ${animal.emoji} on the Animal Personality Quiz! ${animal.description} Take the quiz to find your spirit animal:`)}&url=${encodeURIComponent(shareUrl)}&hashtags=PersonalityQuiz,${animal.name}Personality`
+    },
+    {
+      platform: 'Facebook',
+      icon: Facebook,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
+      borderColor: 'border-blue-100',
+      caption: `I just took the Animal Personality Quiz and discovered I'm ${animal.title} ${animal.emoji}!\n\n${animal.description}\n\nMy key strengths include: ${animal.strengths.slice(0, 3).join(', ')}.\n\nTake the quiz to discover your animal personality and unlock insights about your work style, relationships, and ideal career paths!`,
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(`I'm ${animal.title} ${animal.emoji}! ${animal.description}`)}`
+    },
+    {
+      platform: 'LinkedIn',
+      icon: Linkedin,
+      color: 'text-blue-700',
+      bgColor: 'bg-blue-50',
+      borderColor: 'border-blue-100',
+      caption: `Fascinating insights from the Animal Personality Quiz - I'm ${animal.title} ${animal.emoji}!\n\nKey professional traits:\n• ${animal.traits.slice(0, 3).join('\n• ')}\n\nIdeal careers for my personality type include: ${animal.idealCareers.slice(0, 3).join(', ')}.\n\nThis quiz offers valuable insights for professional development and team building. Highly recommend for understanding work styles and communication preferences!`,
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
+    }
+  ] : [];
+
+  const copyToClipboard = async (text: string, index: number) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
   return (
     <div className="space-y-8 py-8">
       <motion.div
@@ -46,9 +93,9 @@ export default function ThankYouStep({ onRestart }: ThankYouStepProps) {
         
         <div className="text-center p-6 rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100">
           <Share2 className="h-8 w-8 text-purple-500 mx-auto mb-3" />
-          <h3 className="font-semibold text-purple-700 mb-2">Share with Friends</h3>
+          <h3 className="font-semibold text-purple-700 mb-2">Share Your Results</h3>
           <p className="text-sm text-purple-600">
-            Help your friends discover their animal personality too!
+            {animal ? `Proud to be ${animal.title}? Share it!` : 'Help your friends discover their animal personality too!'}
           </p>
         </div>
         
@@ -61,10 +108,84 @@ export default function ThankYouStep({ onRestart }: ThankYouStepProps) {
         </div>
       </motion.div>
 
+      {/* Social Media Share Section */}
+      {animal && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="space-y-4"
+        >
+          <h3 className="text-xl font-semibold text-center text-gray-700 mb-6">
+            Share Your {animal.name} Personality!
+          </h3>
+          
+          <div className="grid gap-4">
+            {socialCaptions.map((social, index) => (
+              <div key={social.platform} className={`rounded-xl p-4 border ${social.borderColor} ${social.bgColor}`}>
+                <div className="flex items-start gap-4">
+                  <social.icon className={`h-6 w-6 ${social.color} flex-shrink-0 mt-1`} />
+                  <div className="flex-1">
+                    <h4 className="font-semibold mb-2">{social.platform}</h4>
+                    <p className="text-sm text-gray-600 whitespace-pre-line mb-3">
+                      {social.caption}
+                    </p>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => window.open(social.url, '_blank')}
+                        size="sm"
+                        className="bg-gradient-to-r from-violet-500 to-indigo-600 hover:from-violet-600 hover:to-indigo-700"
+                      >
+                        Share on {social.platform}
+                      </Button>
+                      <Button
+                        onClick={() => copyToClipboard(social.caption, index)}
+                        size="sm"
+                        variant="outline"
+                        className="border-violet-200 hover:bg-violet-50"
+                      >
+                        {copiedIndex === index ? (
+                          <><Check className="h-4 w-4 mr-1" /> Copied!</>
+                        ) : (
+                          <><Copy className="h-4 w-4 mr-1" /> Copy Caption</>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <p className="text-sm text-gray-600 mb-2">
+              <strong>Quiz URL to share:</strong>
+            </p>
+            <div className="flex items-center justify-center gap-2">
+              <code className="bg-white px-3 py-1 rounded border border-gray-300 text-sm">
+                {shareUrl}
+              </code>
+              <Button
+                onClick={() => copyToClipboard(shareUrl, -1)}
+                size="sm"
+                variant="outline"
+                className="border-gray-300"
+              >
+                {copiedIndex === -1 ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
+        transition={{ delay: 0.8 }}
         className="bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl p-6 border border-violet-100"
       >
         <h3 className="font-semibold text-lg mb-4 text-violet-700 text-center">

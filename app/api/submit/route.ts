@@ -1,41 +1,67 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { updateQuizResultWithEmail, getQuizResultBySessionId, initDatabase } from '@/lib/database';
+import { sendQuizResults } from '@/lib/email';
+import { animalArchetypes } from '@/lib/quiz-data';
 
 export async function POST(request: NextRequest) {
   try {
+    // Initialize database if needed
+    await initDatabase();
+    
     const body = await request.json();
-    const { email, selectedTraits, animalResult, cohortId } = body;
+    const { email, sessionId } = body;
 
     // Validate required fields
-    if (!email || !selectedTraits || !animalResult) {
+    if (!email || !sessionId) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Here you would typically:
-    // 1. Save to database
-    // 2. Send email with results
-    // For now, we'll simulate these operations
+    // Update existing quiz result with email
+    const updatedResult = await updateQuizResultWithEmail(sessionId, email);
 
-    console.log('Quiz submission:', {
+    if (!updatedResult) {
+      return NextResponse.json(
+        { error: 'Quiz session not found' },
+        { status: 404 }
+      );
+    }
+
+    console.log('Email added to quiz result:', {
+      id: updatedResult.id,
       email,
-      animalResult,
-      traitsCount: selectedTraits.length,
-      cohortId
+      sessionId
     });
 
-    // Simulate email sending delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Get the complete quiz results to send in email
+    const quizResult = await getQuizResultBySessionId(sessionId);
+    
+    if (quizResult) {
+      const animalData = animalArchetypes[quizResult.animal_type];
+      const selectedTraits = quizResult.selected_traits;
+      
+      // Send actual email with results
+      await sendQuizResults(
+        email,
+        quizResult.animal_type,
+        animalData,
+        selectedTraits,
+        quizResult.cohort_id
+      );
+
+      console.log('Email sent successfully to:', email);
+    }
 
     return NextResponse.json({
       success: true,
       emailSent: true,
-      message: 'Results sent successfully'
+      message: 'Email saved and results sent successfully'
     });
 
   } catch (error) {
-    console.error('Error processing quiz submission:', error);
+    console.error('Error processing email submission:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

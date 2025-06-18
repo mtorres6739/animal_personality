@@ -17,6 +17,25 @@ export default function Home() {
       {/* Content container */}
       <div className="relative z-10">
         <QuizContainer />
+        
+        {/* Copyright Footer */}
+        <footer className="mt-16 pb-8 text-center">
+          <div className="bg-white/60 backdrop-blur-sm rounded-lg px-6 py-4 mx-auto max-w-md border border-white/20">
+            <p className="text-sm text-gray-600">
+              © 2025 Ethos Lab. All Rights Reserved.
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              <a 
+                href="https://www.ethosaz.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-violet-600 transition-colors duration-200"
+              >
+                www.ethosaz.com
+              </a>
+            </p>
+          </div>
+        </footer>
       </div>
     </main>
   );

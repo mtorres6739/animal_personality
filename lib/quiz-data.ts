@@ -18,6 +18,9 @@ export interface AnimalArchetype {
   growth: string;
   compatibleWith: AnimalType[];
   conflictsWith: AnimalType[];
+  famousPeople: string[];
+  careersToAvoid: string[];
+  idealCareers: string[];
 }
 
 export const animalArchetypes: Record<AnimalType, AnimalArchetype> = {
@@ -49,7 +52,23 @@ export const animalArchetypes: Record<AnimalType, AnimalArchetype> = {
     stress: 'Becomes stressed when forced into rigid structures or when unable to use their creativity and intelligence.',
     growth: 'Should focus on translating ideas into action and building trust through consistent follow-through.',
     compatibleWith: ['owl', 'dolphin'],
-    conflictsWith: ['tiger', 'shark']
+    conflictsWith: ['tiger', 'shark'],
+    famousPeople: ['Steve Jobs', 'Elon Musk', 'Leonardo da Vinci', 'Albert Einstein', 'Mark Zuckerberg'],
+    careersToAvoid: [
+      'Data Entry Clerk',
+      'Assembly Line Worker',
+      'Toll Booth Operator',
+      'Telemarketing Representative',
+      'File Clerk'
+    ],
+    idealCareers: [
+      'Chief Innovation Officer',
+      'Management Consultant',
+      'Venture Capitalist',
+      'Creative Director',
+      'Startup Founder',
+      'Strategic Planning Executive'
+    ]
   },
   dolphin: {
     id: 'dolphin',
@@ -79,7 +98,23 @@ export const animalArchetypes: Record<AnimalType, AnimalArchetype> = {
     stress: 'Becomes stressed in highly competitive or conflict-heavy environments where relationships are strained.',
     growth: 'Should work on setting healthy boundaries and becoming more comfortable with necessary conflicts.',
     compatibleWith: ['fox', 'tortoise', 'owl'],
-    conflictsWith: ['shark']
+    conflictsWith: ['shark'],
+    famousPeople: ['Oprah Winfrey', 'Ellen DeGeneres', 'Barack Obama', 'Maya Angelou', 'Fred Rogers'],
+    careersToAvoid: [
+      'Debt Collector',
+      'Corporate Auditor',
+      'Security Guard',
+      'Quality Control Inspector',
+      'Parking Enforcement Officer'
+    ],
+    idealCareers: [
+      'Chief People Officer',
+      'Organizational Development Director',
+      'Executive Coach',
+      'Nonprofit Executive Director',
+      'Chief Diversity Officer',
+      'Patient Experience Officer'
+    ]
   },
   tortoise: {
     id: 'tortoise',
@@ -109,7 +144,23 @@ export const animalArchetypes: Record<AnimalType, AnimalArchetype> = {
     stress: 'Becomes stressed when pressured to make quick decisions or adapt rapidly to major changes.',
     growth: 'Should work on becoming more flexible and open to new approaches and technologies.',
     compatibleWith: ['dolphin', 'owl'],
-    conflictsWith: ['tiger', 'shark']
+    conflictsWith: ['tiger', 'shark'],
+    famousPeople: ['Warren Buffett', 'Bill Gates', 'Jeff Bezos', 'Angela Merkel', 'Tim Cook'],
+    careersToAvoid: [
+      'Emergency Room Physician',
+      'Stock Day Trader',
+      'Crisis Response Coordinator',
+      'Sports Announcer',
+      'Event Coordinator'
+    ],
+    idealCareers: [
+      'Chief Financial Officer',
+      'Risk Management Director',
+      'Investment Portfolio Manager',
+      'Quality Assurance Director',
+      'Chief Compliance Officer',
+      'Infrastructure Architect'
+    ]
   },
   tiger: {
     id: 'tiger',
@@ -139,7 +190,23 @@ export const animalArchetypes: Record<AnimalType, AnimalArchetype> = {
     stress: 'Becomes stressed when progress is slow or when their authority is questioned or undermined.',
     growth: 'Should focus on developing patience, empathy, and collaborative leadership skills.',
     compatibleWith: ['shark'],
-    conflictsWith: ['fox', 'tortoise', 'dolphin']
+    conflictsWith: ['fox', 'tortoise', 'dolphin'],
+    famousPeople: ['Donald Trump', 'Steve Ballmer', 'Jack Welch', 'Vince Lombardi', 'Gordon Ramsay'],
+    careersToAvoid: [
+      'Library Researcher',
+      'Copy Editor',
+      'Museum Curator',
+      'Technical Writer',
+      'Archivist'
+    ],
+    idealCareers: [
+      'Chief Executive Officer',
+      'Entrepreneur',
+      'Sales Director',
+      'Turnaround Specialist',
+      'Military Officer',
+      'Venture Partner'
+    ]
   },
   owl: {
     id: 'owl',
@@ -169,7 +236,23 @@ export const animalArchetypes: Record<AnimalType, AnimalArchetype> = {
     stress: 'Becomes stressed when forced to make decisions without adequate information or when their expertise is questioned.',
     growth: 'Should work on seeing the bigger picture and being more decisive with incomplete information.',
     compatibleWith: ['fox', 'dolphin', 'tortoise'],
-    conflictsWith: ['tiger']
+    conflictsWith: ['tiger'],
+    famousPeople: ['Stephen Hawking', 'Marie Curie', 'Neil deGrasse Tyson', 'Bill Nye', 'Jane Goodall'],
+    careersToAvoid: [
+      'Sales Representative',
+      'Public Relations Manager',
+      'Event Planner',
+      'Tour Guide',
+      'Stand-up Comedian'
+    ],
+    idealCareers: [
+      'Chief Data Officer',
+      'Research Director',
+      'Principal Scientist',
+      'University Professor',
+      'Chief Technology Officer',
+      'Medical Director'
+    ]
   },
   shark: {
     id: 'shark',
@@ -199,41 +282,73 @@ export const animalArchetypes: Record<AnimalType, AnimalArchetype> = {
     stress: 'Becomes stressed when progress is blocked or when forced to work in overly collaborative environments.',
     growth: 'Should focus on building relationships, developing empathy, and maintaining work-life balance.',
     compatibleWith: ['tiger'],
-    conflictsWith: ['fox', 'dolphin', 'tortoise', 'owl']
+    conflictsWith: ['fox', 'dolphin', 'tortoise', 'owl'],
+    famousPeople: ['Michael Jordan', 'Serena Williams', 'Kobe Bryant', 'Martha Stewart', 'Simon Cowell'],
+    careersToAvoid: [
+      'Social Worker',
+      'Elementary School Teacher',
+      'Grief Counselor',
+      'Non-profit Coordinator',
+      'Customer Service Representative'
+    ],
+    idealCareers: [
+      'Investment Banking Managing Director',
+      'Private Equity Partner',
+      'Chief Operating Officer',
+      'Trial Attorney',
+      'Professional Athlete',
+      'Hedge Fund Manager'
+    ]
   }
 };
 
 export const quizTraits = [
-  'Strategic thinking',
-  'Empathy',
-  'Patience',
-  'Confidence',
-  'Analytical thinking',
-  'Ambition',
-  'Adaptability',
-  'Cooperation',
-  'Reliability',
-  'Decisiveness',
-  'Attention to detail',
-  'Competitiveness',
-  'Quick wit',
-  'Social intelligence',
-  'Persistence',
-  'Action-oriented',
-  'Research skills',
-  'Focus',
-  'Problem-solving',
-  'Communication',
-  'Methodical approach',
-  'Leadership',
-  'Expertise',
-  'Determination',
-  'Resourcefulness',
-  'Team building',
-  'Long-term thinking',
-  'Goal-focused',
-  'Objectivity',
-  'Results-oriented'
+  'Persistent',
+  'Adventurous',
+  'Thorough',
+  'Patient',
+  'Powerful',
+  'Charismatic',
+  'Logical',
+  'Sincere',
+  'Motivated',
+  'Optimistic',
+  'Practical',
+  'Accurate',
+  'Competitive',
+  'Demanding',
+  'Risk taker',
+  'Serious',
+  'Compassionate',
+  'Driven',
+  'Curious',
+  'Passionate',
+  'Talkative',
+  'Assertive',
+  'Independent',
+  'Enthusiastic',
+  'Idealistic',
+  'Charitable',
+  'Peaceful',
+  'Strong willed',
+  'Respectful',
+  'Cheerful',
+  'Goal oriented',
+  'Procedural',
+  'Selfless',
+  'People focused',
+  'Achieving',
+  'Meticulous',
+  'Seeking',
+  'Conventional',
+  'Social',
+  'Dependable',
+  'Influential',
+  'Impulsive',
+  'Perfectionist',
+  'Forward',
+  'Supportive',
+  'Analytical'
 ];
 
 export function determineAnimalType(selectedTraits: string[]): AnimalType {
