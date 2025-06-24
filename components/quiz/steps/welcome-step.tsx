@@ -14,7 +14,7 @@ interface WelcomeStepProps {
   onStart: (cohortId?: string) => void;
 }
 
-const animalOrder: AnimalType[] = ['fox', 'dolphin', 'tortoise', 'tiger', 'owl', 'shark'];
+const animalOrder: AnimalType[] = ['dove', 'owl', 'peacock', 'shark'];
 
 const animals = animalOrder.map((type, index) => ({
   ...animalArchetypes[type],
@@ -41,116 +41,20 @@ export default function WelcomeStep({ onStart }: WelcomeStepProps) {
 
   return (
     <div className="space-y-8 py-4">
-      <div className="text-center mb-8">
+      {/* Hero Section with Prominent CTA */}
+      <div className="text-center mb-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-6"
+          className="mb-8"
         >
-          {/* Animal Collage Hero */}
-          <div className="relative mb-12">
-            {/* Main collage grid */}
-            <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
-              {animals.map((animal, index) => {
-                const isActive = index === currentAnimalIndex;
-                return (
-                  <motion.div
-                    key={animal.id}
-                    className={`relative aspect-square rounded-2xl overflow-hidden border-4 transition-all duration-500 ${
-                      isActive 
-                        ? 'border-violet-400 shadow-2xl shadow-violet-300/50 scale-105' 
-                        : 'border-gray-200 shadow-lg'
-                    }`}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ 
-                      opacity: 1, 
-                      scale: isActive ? 1.05 : 1,
-                      rotate: isActive ? [0, 2, 0] : 0
-                    }}
-                    transition={{ 
-                      delay: animal.delay,
-                      duration: 0.6,
-                      rotate: { duration: 2, repeat: isActive ? Infinity : 0 }
-                    }}
-                  >
-                    {/* Background gradient */}
-                    <div className={`absolute inset-0 bg-gradient-to-br transition-all duration-500 ${
-                      isActive 
-                        ? 'from-violet-400 via-purple-400 to-indigo-400' 
-                        : 'from-violet-100 via-purple-100 to-indigo-100'
-                    }`} />
-                    
-                    {/* Animal emoji */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div 
-                        className={`text-6xl transition-all duration-500 ${
-                          isActive ? 'scale-110' : 'scale-100'
-                        }`}
-                        animate={isActive ? { 
-                          y: [0, -5, 0],
-                          rotateY: [0, 10, 0]
-                        } : {}}
-                        transition={{ 
-                          duration: 2,
-                          repeat: isActive ? Infinity : 0,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        {animal.emoji}
-                      </motion.div>
-                    </div>
-                    
-                    {/* Animal name */}
-                    <div className="absolute bottom-2 left-2 right-2">
-                      <div className={`text-center text-xs font-semibold px-2 py-1 rounded-full transition-all duration-500 ${
-                        isActive 
-                          ? 'bg-white/90 text-violet-700' 
-                          : 'bg-white/70 text-gray-600'
-                      }`}>
-                        {animal.name}
-                      </div>
-                    </div>
-                    
-                    {/* Active indicator */}
-                    {isActive && (
-                      <motion.div
-                        className="absolute -top-2 -right-2 w-6 h-6 bg-violet-500 rounded-full flex items-center justify-center"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                        <Sparkles className="h-3 w-3 text-white" />
-                      </motion.div>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </div>
-            
-            {/* Floating decorative elements */}
-            <motion.div
-              className="absolute -top-6 left-10 text-2xl opacity-30"
-              animate={{ y: [-5, 5, -5], rotate: [-10, 10, -10] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              ✨
-            </motion.div>
-            <motion.div
-              className="absolute -bottom-6 right-10 text-2xl opacity-30"
-              animate={{ y: [5, -5, 5], rotate: [10, -10, 10] }}
-              transition={{ duration: 3.5, repeat: Infinity }}
-            >
-              🌟
-            </motion.div>
-          </div>
-          
-          <motion.h2 
-            className="text-5xl font-bold bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-transparent bg-clip-text mb-4"
-            animate={{ 
+          <motion.h1
+            className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-transparent bg-clip-text mb-6"
+            animate={{
               backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
             }}
-            transition={{ 
+            transition={{
               duration: 5,
               repeat: Infinity,
               ease: "linear"
@@ -158,8 +62,9 @@ export default function WelcomeStep({ onStart }: WelcomeStepProps) {
             style={{ backgroundSize: "200% 200%" }}
           >
             Discover Your Animal Personality
-          </motion.h2>
-          <div className="text-muted-foreground text-xl max-w-3xl mx-auto leading-relaxed h-20 flex items-center justify-center">
+          </motion.h1>
+
+          <div className="text-muted-foreground text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed mb-8">
             <div className="text-center">
               <span className="text-gray-600">Are you </span>
               <Typewriter
@@ -174,112 +79,158 @@ export default function WelcomeStep({ onStart }: WelcomeStepProps) {
               <span className="text-gray-600">?</span>
             </div>
           </div>
-        </motion.div>
-      </div>
 
-      <div className="grid md:grid-cols-3 gap-6 mb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="text-center p-6 rounded-xl bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-100"
-        >
-          <Heart className="h-8 w-8 text-pink-500 mx-auto mb-3" />
-          <h3 className="font-semibold text-pink-700 mb-2">Understand Yourself</h3>
-          <p className="text-sm text-pink-600">Discover your core traits and natural tendencies</p>
+          {/* Primary CTA Button - Most Prominent */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="mb-8"
+          >
+            <Button
+              onClick={handleStart}
+              size="lg"
+              className="w-full max-w-md mx-auto bg-gradient-to-r from-violet-500 to-indigo-600 hover:from-violet-600 hover:to-indigo-700 border-none shadow-2xl shadow-violet-300/50 text-xl py-8 px-12 rounded-2xl font-bold transform hover:scale-105 transition-all duration-300"
+            >
+              <Sparkles className="mr-3 h-6 w-6" />
+              Start Your Personality Quiz
+              {cohortId.trim() && (
+                <span className="ml-2 text-sm opacity-80">({cohortId.trim()})</span>
+              )}
+            </Button>
+            <p className="text-sm text-center text-muted-foreground mt-4">
+              ⏱️ Takes 2 minutes • 📧 Results sent to email • 🔒 Completely private
+            </p>
+          </motion.div>
         </motion.div>
-        
+
+        {/* Compact Animal Preview */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100"
+          className="mb-8"
         >
-          <Brain className="h-8 w-8 text-blue-500 mx-auto mb-3" />
-          <h3 className="font-semibold text-blue-700 mb-2">Learn & Grow</h3>
-          <p className="text-sm text-blue-600">Gain insights into your decision-making patterns</p>
-        </motion.div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="text-center p-6 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100"
-        >
-          <Users className="h-8 w-8 text-green-500 mx-auto mb-3" />
-          <h3 className="font-semibold text-green-700 mb-2">Connect Better</h3>
-          <p className="text-sm text-green-600">Improve relationships with compatibility insights</p>
+          <div className="grid grid-cols-4 gap-3 max-w-lg mx-auto mb-6">
+            {animals.map((animal, index) => {
+              const isActive = index === currentAnimalIndex;
+              return (
+                <motion.div
+                  key={animal.id}
+                  className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-500 ${
+                    isActive
+                      ? 'border-violet-400 shadow-lg shadow-violet-300/30 scale-105'
+                      : 'border-gray-200 shadow-sm'
+                  }`}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{
+                    opacity: 1,
+                    scale: isActive ? 1.05 : 1
+                  }}
+                  transition={{
+                    delay: animal.delay,
+                    duration: 0.4
+                  }}
+                >
+                  {/* Background gradient */}
+                  <div className={`absolute inset-0 bg-gradient-to-br transition-all duration-500 ${
+                    isActive
+                      ? 'from-violet-200 via-purple-200 to-indigo-200'
+                      : 'from-violet-50 via-purple-50 to-indigo-50'
+                  }`} />
+
+                  {/* Animal emoji */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-3xl">
+                      {animal.emoji}
+                    </div>
+                  </div>
+
+                  {/* Animal name */}
+                  <div className="absolute bottom-1 left-1 right-1">
+                    <div className={`text-center text-xs font-medium px-1 py-0.5 rounded transition-all duration-500 ${
+                      isActive
+                        ? 'bg-white/90 text-violet-700'
+                        : 'bg-white/70 text-gray-600'
+                    }`}>
+                      {animal.name}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+          <p className="text-center text-gray-600 text-sm mt-4">
+            Meet the four personality types you could be
+          </p>
         </motion.div>
       </div>
 
-      <div className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.0 }}
-          className="bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl p-6 border border-violet-100"
-        >
-          <h3 className="font-semibold text-lg mb-4 text-violet-700">What you&apos;ll discover:</h3>
-          <div className="grid md:grid-cols-2 gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-violet-400 rounded-full"></span>
-              <span>Your primary animal archetype</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-violet-400 rounded-full"></span>
-              <span>Key personality strengths</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-violet-400 rounded-full"></span>
-              <span>Natural communication style</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-violet-400 rounded-full"></span>
-              <span>Relationship compatibility</span>
-            </div>
+      {/* Simplified Benefits Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.0 }}
+        className="bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl p-6 border border-violet-100 max-w-2xl mx-auto"
+      >
+        <h3 className="font-semibold text-lg mb-4 text-violet-700 text-center">What you'll discover:</h3>
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-violet-400 rounded-full"></span>
+            <span>Your animal archetype</span>
           </div>
-        </motion.div>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-violet-400 rounded-full"></span>
+            <span>Personality strengths</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-violet-400 rounded-full"></span>
+            <span>Communication style</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-violet-400 rounded-full"></span>
+            <span>Compatibility insights</span>
+          </div>
+        </div>
+      </motion.div>
 
-        {/* Cohort Input Section */}
+      <div className="space-y-4">
+
+        {/* Compact Cohort Input Section */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.0 }}
-          className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-6 border border-emerald-100"
+          transition={{ delay: 1.2 }}
+          className="max-w-md mx-auto"
         >
-          <div className="flex items-center gap-2 mb-4">
-            <Users2 className="h-5 w-5 text-emerald-600" />
-            <h3 className="font-semibold text-lg text-emerald-700">Group or Training Session?</h3>
-          </div>
-          <p className="text-sm text-emerald-600 mb-4">
-            If you&apos;re taking this quiz as part of a group training or workshop, enter your cohort code below to see group results.
-          </p>
-          
           {!showCohortInput ? (
-            <Button
-              variant="outline"
-              onClick={() => setShowCohortInput(true)}
-              className="text-emerald-600 border-emerald-200 hover:bg-emerald-50"
-            >
-              <Users2 className="mr-2 h-4 w-4" />
-              Enter Cohort Code
-            </Button>
+            <div className="text-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowCohortInput(true)}
+                className="text-gray-500 hover:text-emerald-600 text-sm"
+              >
+                <Users2 className="mr-2 h-4 w-4" />
+                Taking this for a group? Enter cohort code
+              </Button>
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
               <div>
                 <Label htmlFor="cohortId" className="text-sm font-medium text-emerald-700">
-                  Cohort Code or Group Name
+                  Cohort Code
                 </Label>
                 <Input
                   id="cohortId"
                   type="text"
-                  placeholder="e.g., Leadership2025, Team-Alpha, etc."
+                  placeholder="e.g., Leadership2025"
                   value={cohortId}
                   onChange={(e) => setCohortId(e.target.value)}
                   className="mt-1 border-emerald-200 focus:border-emerald-400 focus:ring-emerald-400"
                 />
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 justify-center">
                 <Button
                   variant="outline"
                   size="sm"
@@ -304,32 +255,15 @@ export default function WelcomeStep({ onStart }: WelcomeStepProps) {
           )}
         </motion.div>
 
+        {/* Secondary Actions */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.1 }}
-          className="space-y-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.3 }}
+          className="flex justify-center"
         >
-          <Button 
-            onClick={handleStart} 
-            size="lg"
-            className="w-full bg-gradient-to-r from-violet-500 to-indigo-600 hover:from-violet-600 hover:to-indigo-700 border-none shadow-lg shadow-violet-200 text-lg py-6"
-          >
-            <Sparkles className="mr-2 h-5 w-5" />
-            Begin Your Journey
-            {cohortId.trim() && (
-              <span className="ml-2 text-sm opacity-80">({cohortId.trim()})</span>
-            )}
-          </Button>
-          
-          <div className="flex justify-center">
-            <QRCodeDialog />
-          </div>
+          <QRCodeDialog />
         </motion.div>
-
-        <p className="text-sm text-center text-muted-foreground">
-          ⏱️ Takes about 2 minutes • 📧 Results sent to your email • 🔒 Completely private
-        </p>
       </div>
     </div>
   );
