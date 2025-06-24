@@ -222,7 +222,7 @@ export default function SocialMediaShare({
               <div className="flex items-center justify-center h-48">
                 <div className="text-center">
                   <p className="text-sm text-red-600 mb-2">{error}</p>
-                  <Button onClick={generateImage} size="sm" variant="outline">
+                  <Button onClick={() => generateImage()} size="sm" variant="outline">
                     Try Again
                   </Button>
                 </div>
