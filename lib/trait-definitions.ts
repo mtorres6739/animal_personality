@@ -465,9 +465,340 @@ export const traitDefinitions: Record<string, TraitDefinition> = {
       'Using logic and reasoning to evaluate options'
     ],
     relatedTo: ['Logical', 'Thorough', 'Seeking']
+  },
+  // Additional traits from quiz questions
+  'Restless': {
+    name: 'Restless',
+    definition: 'Having difficulty staying still or focused, always seeking new stimulation and activity.',
+    examples: [
+      'Feeling the need to constantly move or change activities',
+      'Getting bored easily with routine tasks'
+    ],
+    relatedTo: ['Impulsive', 'Seeking', 'Adventurous']
+  },
+  'Harsh': {
+    name: 'Harsh',
+    definition: 'Direct and sometimes blunt in communication, prioritizing honesty over diplomacy.',
+    examples: [
+      'Speaking directly about problems without sugar-coating',
+      'Giving feedback that may seem critical but is meant to help'
+    ],
+    relatedTo: ['Forward', 'Assertive', 'Strong willed']
+  },
+  'Dependent': {
+    name: 'Dependent',
+    definition: 'Preferring to rely on others for support and guidance rather than acting independently.',
+    examples: [
+      'Seeking approval before making important decisions',
+      'Feeling more comfortable when working with others'
+    ],
+    relatedTo: ['Supportive', 'People focused', 'Peaceful']
+  },
+  'Moralistic': {
+    name: 'Moralistic',
+    definition: 'Having strong beliefs about right and wrong, and expecting others to follow the same moral standards.',
+    examples: [
+      'Standing firm on ethical principles',
+      'Feeling uncomfortable when others act against your values'
+    ],
+    relatedTo: ['Idealistic', 'Respectful', 'Conventional']
+  },
+  'Pleasant': {
+    name: 'Pleasant',
+    definition: 'Friendly, agreeable, and enjoyable to be around; creating positive interactions.',
+    examples: [
+      'Making others feel comfortable in social situations',
+      'Maintaining a positive attitude even during challenges'
+    ],
+    relatedTo: ['Cheerful', 'Social', 'Compassionate']
+  },
+  'Motivator': {
+    name: 'Motivator',
+    definition: 'Someone who inspires and encourages others to achieve their goals and potential.',
+    examples: [
+      'Helping team members see their strengths and possibilities',
+      'Encouraging others to push through difficult challenges'
+    ],
+    relatedTo: ['Charismatic', 'Enthusiastic', 'People focused']
+  },
+  'Willing': {
+    name: 'Willing',
+    definition: 'Ready and eager to help, participate, or take on new challenges.',
+    examples: [
+      'Volunteering for new projects or responsibilities',
+      'Being open to trying different approaches'
+    ],
+    relatedTo: ['Supportive', 'Adventurous', 'Cooperative']
+  },
+  // Challenging traits from question 7
+  'Uninvolved': {
+    name: 'Uninvolved',
+    definition: 'Preferring to stay detached from situations rather than actively participating.',
+    examples: [
+      'Choosing to observe rather than engage in group activities',
+      'Maintaining emotional distance from workplace conflicts'
+    ],
+    relatedTo: ['Independent', 'Withdrawn', 'Conventional']
+  },
+  'Undisciplined': {
+    name: 'Undisciplined',
+    definition: 'Having difficulty maintaining self-control or following structured routines.',
+    examples: [
+      'Struggling to stick to schedules or deadlines',
+      'Acting on impulse rather than following plans'
+    ],
+    relatedTo: ['Impulsive', 'Restless', 'Adventurous']
+  },
+  'Unemotional': {
+    name: 'Unemotional',
+    definition: 'Not easily affected by or expressing emotions; maintaining emotional distance.',
+    examples: [
+      'Staying calm and rational during emotional situations',
+      'Making decisions based on logic rather than feelings'
+    ],
+    relatedTo: ['Logical', 'Analytical', 'Independent']
+  },
+  'Unsympathetic': {
+    name: 'Unsympathetic',
+    definition: 'Having difficulty understanding or sharing the feelings of others.',
+    examples: [
+      'Focusing on facts rather than emotions in conversations',
+      'Expecting others to handle their problems independently'
+    ],
+    relatedTo: ['Logical', 'Demanding', 'Independent']
+  },
+  // Additional traits
+  'Severe': {
+    name: 'Severe',
+    definition: 'Strict and demanding in standards; not tolerating mistakes or weakness.',
+    examples: [
+      'Setting very high expectations for performance',
+      'Being critical when standards are not met'
+    ],
+    relatedTo: ['Demanding', 'Perfectionist', 'Strong willed']
+  },
+  'Compromising': {
+    name: 'Compromising',
+    definition: 'Willing to find middle ground and make mutual concessions to reach agreement.',
+    examples: [
+      'Finding solutions that work for everyone involved',
+      'Being flexible about your preferences to maintain harmony'
+    ],
+    relatedTo: ['Peaceful', 'Respectful', 'People focused']
+  },
+  // More challenging traits
+  'Myopic': {
+    name: 'Myopic',
+    definition: 'Focused on immediate concerns without considering long-term consequences.',
+    examples: [
+      'Making decisions based on short-term benefits',
+      'Having difficulty seeing the bigger picture'
+    ],
+    relatedTo: ['Impulsive', 'Demanding', 'Focused']
+  },
+  'Predictable': {
+    name: 'Predictable',
+    definition: 'Consistent and reliable in behavior; others know what to expect from you.',
+    examples: [
+      'Following the same routines and approaches consistently',
+      'Responding to situations in expected ways'
+    ],
+    relatedTo: ['Dependable', 'Conventional', 'Procedural']
+  },
+  'Interrupts': {
+    name: 'Interrupts',
+    definition: 'Tendency to break into conversations or activities before others are finished.',
+    examples: [
+      'Speaking up with ideas before others complete their thoughts',
+      'Jumping into activities without waiting for instructions'
+    ],
+    relatedTo: ['Impulsive', 'Enthusiastic', 'Forward']
+  },
+  'Reacting': {
+    name: 'Reacting',
+    definition: 'Responding immediately to situations based on emotions rather than reflection.',
+    examples: [
+      'Giving quick responses to unexpected situations',
+      'Acting on first instincts rather than careful consideration'
+    ],
+    relatedTo: ['Impulsive', 'Passionate', 'Emotional']
+  },
+  'Minimize risk': {
+    name: 'Minimize risk',
+    definition: 'Preferring safe, proven approaches and avoiding uncertain situations.',
+    examples: [
+      'Choosing well-tested methods over experimental approaches',
+      'Avoiding situations with unpredictable outcomes'
+    ],
+    relatedTo: ['Conventional', 'Practical', 'Careful']
+  },
+  'Risk averse': {
+    name: 'Risk averse',
+    definition: 'Strongly preferring certainty and security over potentially rewarding but uncertain options.',
+    examples: [
+      'Choosing stable options even if they offer lower rewards',
+      'Feeling uncomfortable with unpredictable situations'
+    ],
+    relatedTo: ['Conventional', 'Practical', 'Dependable']
+  },
+  // Additional traits from later questions
+  'Tough': {
+    name: 'Tough',
+    definition: 'Resilient and able to handle difficult situations without being easily discouraged.',
+    examples: [
+      'Persevering through challenging circumstances',
+      'Maintaining strength during stressful times'
+    ],
+    relatedTo: ['Strong willed', 'Persistent', 'Independent']
+  },
+  'Awkward': {
+    name: 'Awkward',
+    definition: 'Feeling uncomfortable or clumsy in social situations; lacking social ease.',
+    examples: [
+      'Feeling uncertain about what to say in conversations',
+      'Having difficulty reading social cues'
+    ],
+    relatedTo: ['Shy', 'Withdrawn', 'Serious']
+  },
+  'Excitable': {
+    name: 'Excitable',
+    definition: 'Easily aroused to enthusiasm or agitation; quick to show strong emotions.',
+    examples: [
+      'Getting very enthusiastic about new opportunities',
+      'Showing strong reactions to unexpected events'
+    ],
+    relatedTo: ['Enthusiastic', 'Passionate', 'Impulsive']
+  },
+  'Withdrawn': {
+    name: 'Withdrawn',
+    definition: 'Tending to avoid social interaction and keep to oneself.',
+    examples: [
+      'Preferring to work alone rather than in groups',
+      'Feeling drained by too much social interaction'
+    ],
+    relatedTo: ['Shy', 'Independent', 'Serious']
+  },
+  'Shy': {
+    name: 'Shy',
+    definition: 'Feeling nervous or timid in the company of other people.',
+    examples: [
+      'Feeling uncomfortable speaking up in group settings',
+      'Preferring to listen rather than lead conversations'
+    ],
+    relatedTo: ['Withdrawn', 'Peaceful', 'Respectful']
+  },
+  'Bossy': {
+    name: 'Bossy',
+    definition: 'Fond of giving orders and telling others what to do.',
+    examples: [
+      'Taking charge of situations and directing others',
+      'Having strong opinions about how things should be done'
+    ],
+    relatedTo: ['Assertive', 'Demanding', 'Strong willed']
+  },
+  // Final set of traits
+  'Doormat': {
+    name: 'Doormat',
+    definition: 'Allowing others to take advantage of you; having difficulty standing up for yourself.',
+    examples: [
+      'Agreeing to requests even when you prefer not to',
+      'Having trouble saying no to others'
+    ],
+    relatedTo: ['Dependent', 'Peaceful', 'Compromising']
+  },
+  'Reclusive': {
+    name: 'Reclusive',
+    definition: 'Preferring to avoid contact with others and live in isolation.',
+    examples: [
+      'Choosing to spend time alone rather than socializing',
+      'Feeling most comfortable in solitary activities'
+    ],
+    relatedTo: ['Withdrawn', 'Independent', 'Shy']
+  },
+  'Braggart': {
+    name: 'Braggart',
+    definition: 'Someone who boasts about their achievements or abilities.',
+    examples: [
+      'Frequently talking about personal accomplishments',
+      'Emphasizing your successes in conversations'
+    ],
+    relatedTo: ['Confident', 'Talkative', 'Forward']
+  },
+  'Hotheaded': {
+    name: 'Hotheaded',
+    definition: 'Quick to anger or lose temper; impulsive in emotional reactions.',
+    examples: [
+      'Reacting strongly to frustrating situations',
+      'Having difficulty controlling anger when provoked'
+    ],
+    relatedTo: ['Impulsive', 'Passionate', 'Reacting']
+  },
+  'Vengeful': {
+    name: 'Vengeful',
+    definition: 'Seeking to harm someone in return for a perceived injury or wrong.',
+    examples: [
+      'Remembering slights and wanting to get even',
+      'Having difficulty forgiving those who have wronged you'
+    ],
+    relatedTo: ['Demanding', 'Strong willed', 'Unforgiving']
+  },
+  'Rash': {
+    name: 'Rash',
+    definition: 'Acting without thinking carefully about consequences; hasty.',
+    examples: [
+      'Making quick decisions without considering all options',
+      'Jumping into situations without proper planning'
+    ],
+    relatedTo: ['Impulsive', 'Risk taker', 'Excitable']
+  },
+  'Fearful': {
+    name: 'Fearful',
+    definition: 'Feeling afraid or anxious about potential dangers or negative outcomes.',
+    examples: [
+      'Worrying about things that might go wrong',
+      'Avoiding situations that feel risky or uncertain'
+    ],
+    relatedTo: ['Risk averse', 'Cautious', 'Anxious']
+  },
+  'Consistent': {
+    name: 'Consistent',
+    definition: 'Acting or behaving in the same way over time; reliable and steady.',
+    examples: [
+      'Maintaining the same standards and approaches',
+      'Being predictable in your responses and decisions'
+    ],
+    relatedTo: ['Dependable', 'Predictable', 'Conventional']
+  },
+  'Elaborate': {
+    name: 'Elaborate',
+    definition: 'Involving many carefully arranged parts or details; complex and detailed.',
+    examples: [
+      'Providing detailed explanations and descriptions',
+      'Creating comprehensive plans with many components'
+    ],
+    relatedTo: ['Thorough', 'Meticulous', 'Detailed']
   }
 };
 
 export function getTraitDefinition(traitName: string): TraitDefinition | null {
-  return traitDefinitions[traitName] || null;
+  // First try exact match
+  if (traitDefinitions[traitName]) {
+    return traitDefinitions[traitName];
+  }
+
+  // Try capitalized version
+  const capitalizedTrait = traitName.charAt(0).toUpperCase() + traitName.slice(1);
+  if (traitDefinitions[capitalizedTrait]) {
+    return traitDefinitions[capitalizedTrait];
+  }
+
+  // Try case-insensitive search
+  const lowerTrait = traitName.toLowerCase();
+  for (const [key, value] of Object.entries(traitDefinitions)) {
+    if (key.toLowerCase() === lowerTrait) {
+      return value;
+    }
+  }
+
+  return null;
 }

@@ -44,14 +44,21 @@ export async function saveQuizResult(data: {
   sessionId: string;
 }) {
   const pool = getPool();
-  
+
+  // Use UPSERT (INSERT ... ON CONFLICT) to handle duplicate session IDs
   const result = await pool.query(
     `INSERT INTO quiz_results (animal_type, selected_traits, cohort_id, session_id)
      VALUES ($1, $2, $3, $4)
+     ON CONFLICT (session_id)
+     DO UPDATE SET
+       animal_type = EXCLUDED.animal_type,
+       selected_traits = EXCLUDED.selected_traits,
+       cohort_id = EXCLUDED.cohort_id,
+       updated_at = CURRENT_TIMESTAMP
      RETURNING id`,
     [data.animalType, JSON.stringify(data.selectedTraits), data.cohortId || null, data.sessionId]
   );
-  
+
   return result.rows[0];
 }
 
@@ -84,30 +91,30 @@ export async function getQuizResultBySessionId(sessionId: string) {
 
 export async function getCohortStats(cohortId: string) {
   const pool = getPool();
-  
+
   // Get animal type distribution for the cohort
   const result = await pool.query(
-    `SELECT 
+    `SELECT
        animal_type,
        COUNT(*) as count,
        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 1) as percentage
-     FROM quiz_results 
+     FROM quiz_results
      WHERE cohort_id = $1
      GROUP BY animal_type
      ORDER BY count DESC`,
     [cohortId]
   );
-  
+
   // Get total participants
   const totalResult = await pool.query(
     `SELECT COUNT(DISTINCT session_id) as total_participants
-     FROM quiz_results 
+     FROM quiz_results
      WHERE cohort_id = $1`,
     [cohortId]
   );
-  
+
   const totalParticipants = parseInt(totalResult.rows[0]?.total_participants || '0');
-  
+
   return {
     cohortId,
     totalParticipants,
@@ -117,4 +124,51 @@ export async function getCohortStats(cohortId: string) {
       percentage: parseFloat(row.percentage)
     }))
   };
+}
+
+export async function getTotalQuizTakers(): Promise<number> {
+  const pool = getPool();
+
+  try {
+    const result = await pool.query(
+      `SELECT COUNT(DISTINCT session_id) as total_count
+       FROM quiz_results`
+    );
+
+    return parseInt(result.rows[0]?.total_count || '0');
+  } catch (error) {
+    console.error('Error getting total quiz takers:', error);
+    return 0; // Return 0 if there's an error
+  }
+}
+
+export async function getQuizTakerNumber(sessionId: string): Promise<number> {
+  const pool = getPool();
+
+  try {
+    // Get the creation timestamp of the current session
+    const sessionResult = await pool.query(
+      `SELECT created_at FROM quiz_results WHERE session_id = $1`,
+      [sessionId]
+    );
+
+    if (!sessionResult.rows[0]) {
+      return 0; // Session not found
+    }
+
+    const sessionCreatedAt = sessionResult.rows[0].created_at;
+
+    // Count how many unique sessions were created before this one
+    const countResult = await pool.query(
+      `SELECT COUNT(DISTINCT session_id) as position
+       FROM quiz_results
+       WHERE created_at <= $1`,
+      [sessionCreatedAt]
+    );
+
+    return parseInt(countResult.rows[0]?.position || '0');
+  } catch (error) {
+    console.error('Error getting quiz taker number:', error);
+    return 0; // Return 0 if there's an error
+  }
 }

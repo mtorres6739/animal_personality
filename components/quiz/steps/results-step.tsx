@@ -5,8 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { motion } from 'framer-motion';
-import { AnimalType, animalArchetypes } from '@/lib/quiz-data';
+import { AnimalType, animalArchetypes, getBlendedResults, QuizResponse } from '@/lib/quiz-data';
 import { Mail, ArrowRight, CheckCircle, Star, Users, Lightbulb, Target, Zap, Heart, AlertTriangle, TrendingUp, Shield, Brain, UserPlus, UserX, Crown, BarChart3, Users2, Percent, X, Camera } from 'lucide-react';
+import PercentageBreakdown from '../percentage-breakdown';
+import QuizTakerCounter from '../quiz-taker-counter';
+import SocialMediaShare from '@/components/ui/social-media-share';
 
 interface ResultsStepProps {
   animalType: AnimalType;
@@ -14,14 +17,25 @@ interface ResultsStepProps {
   onSubmit: (email: string) => Promise<void>;
   cohortId?: string;
   sessionId: string;
+  quizResponses?: QuizResponse[]; // Add quiz responses for percentage calculation
 }
 
-export default function ResultsStep({ animalType, selectedTraits, onSubmit, cohortId, sessionId }: ResultsStepProps) {
+export default function ResultsStep({ animalType, selectedTraits, onSubmit, cohortId, sessionId, quizResponses }: ResultsStepProps) {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const animal = animalArchetypes[animalType];
+  // Calculate percentage breakdown from quiz responses or selected traits
+  const percentageBreakdown = quizResponses
+    ? getBlendedResults(quizResponses.map(r => r.selectedOption))
+    : getBlendedResults(selectedTraits);
+
+  // Determine the actual primary animal from percentage breakdown (highest percentage)
+  const primaryAnimalType = (Object.entries(percentageBreakdown) as [AnimalType, number][])
+    .sort(([, a], [, b]) => b - a)[0][0];
+
+  // Use the primary animal from percentage breakdown for consistency
+  const animal = animalArchetypes[primaryAnimalType];
 
   // Fetch real cohort data from API
   const [cohortData, setCohortData] = useState<any>(null);
@@ -59,6 +73,9 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
 
   return (
     <div className="space-y-8 py-4">
+      {/* Quiz Taker Counter */}
+      <QuizTakerCounter sessionId={sessionId} />
+
       {/* Results Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -82,6 +99,18 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
             {animal.description}
           </p>
         </div>
+      </motion.div>
+
+      {/* Percentage Breakdown */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <PercentageBreakdown
+          percentages={percentageBreakdown}
+          cohortData={cohortData}
+        />
       </motion.div>
 
       {/* Comprehensive Results Grid */}
@@ -444,8 +473,8 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
             <div className="text-center p-4 bg-white rounded-lg border border-blue-100">
               <Percent className="h-6 w-6 text-blue-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-blue-700">
-                {cohortData.distributions && cohortData.distributions.length > 0 
-                  ? (cohortData.distributions.find((d: any) => d.animal === animalType)?.percentage || 0)
+                {cohortData.distributions && cohortData.distributions.length > 0
+                  ? (cohortData.distributions.find((d: any) => d.animal === primaryAnimalType)?.percentage || 0)
                   : 100}%
               </div>
               <div className="text-sm text-blue-600">Share Your Type</div>
@@ -456,7 +485,7 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
             <h4 className="font-medium text-blue-700 mb-3">Group Distribution:</h4>
             {cohortData.distributions && cohortData.distributions.length > 0 ? cohortData.distributions.map((dist: any, index: number) => {
               const animalData = animalArchetypes[dist.animal as AnimalType];
-              const isUserType = dist.animal === animalType;
+              const isUserType = dist.animal === primaryAnimalType;
               
               return (
                 <motion.div
@@ -534,6 +563,13 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
           )}
         </motion.div>
       )}
+
+      {/* Social Media Share */}
+      <SocialMediaShare
+        animalType={animalType}
+        animal={animal}
+        selectedTraits={selectedTraits}
+      />
 
       {/* Email Form */}
       <motion.div

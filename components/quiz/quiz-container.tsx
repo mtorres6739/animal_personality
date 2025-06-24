@@ -3,25 +3,26 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import WelcomeStep from './steps/welcome-step';
-import TraitsStep from './steps/traits-step';
+import QuestionStep from './steps/question-step';
 import ResultsStep from './steps/results-step';
 import ThankYouStep from './steps/thank-you-step';
 import { Progress } from '@/components/ui/progress';
-import { AnimalType, determineAnimalType } from '@/lib/quiz-data';
+import { AnimalType, determineAnimalTypeFromResponses, responsesToTraits, QuizResponse } from '@/lib/quiz-data';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { Sparkles, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-type QuizStep = 'welcome' | 'traits' | 'results' | 'thank-you';
+type QuizStep = 'welcome' | 'questions' | 'results' | 'thank-you';
 
 export default function QuizContainer() {
   const [currentStep, setCurrentStep] = useState<QuizStep>('welcome');
   const [email, setEmail] = useState('');
-  const [selectedTraits, setSelectedTraits] = useState<string[]>([]);
+  const [quizResponses, setQuizResponses] = useState<QuizResponse[]>([]);
   const [animalResult, setAnimalResult] = useState<AnimalType | null>(null);
   const [sessionId, setSessionId] = useState<string>('');
   const [cohortId, setCohortId] = useState<string>('');
+  const [saveStatus, setSaveStatus] = useState<'pending' | 'success' | 'failed'>('pending');
   const { toast } = useToast();
 
   // Generate session ID on component mount
@@ -33,32 +34,39 @@ export default function QuizContainer() {
     setSessionId(generateSessionId());
   }, []);
 
-  const progressPercentage = 
+  const progressPercentage =
     currentStep === 'welcome' ? 0 :
-    currentStep === 'traits' ? 33 :
+    currentStep === 'questions' ? 33 :
     currentStep === 'results' ? 66 : 100;
 
   const handleWelcomeStart = (groupCohortId?: string) => {
     if (groupCohortId) {
       setCohortId(groupCohortId);
     }
-    setCurrentStep('traits');
+    setCurrentStep('questions');
   };
 
-  const handleTraitsSubmit = async (traits: string[]) => {
-    setSelectedTraits(traits);
-    const result = determineAnimalType(traits);
+  const handleQuestionsSubmit = async (responses: QuizResponse[]) => {
+    setQuizResponses(responses);
+    const result = determineAnimalTypeFromResponses(responses);
     setAnimalResult(result);
-    
+
+    // Convert responses to traits for backward compatibility with API
+    const traits = responsesToTraits(responses);
+
     console.log('Saving quiz results (without email):', {
+      responses,
       traits,
       result,
       cohortId,
       sessionId
     });
-    
+
+    // Always proceed to results, regardless of save status
+    setCurrentStep('results');
+
+    // Attempt to save quiz results to database (non-blocking)
     try {
-      // Save quiz results to database (without email)
       const response = await fetch('/api/save-quiz', {
         method: 'POST',
         headers: {
@@ -79,15 +87,17 @@ export default function QuizContainer() {
         throw new Error(data.error || 'Failed to save quiz results');
       }
 
-      console.log('Quiz results saved successfully, proceeding to results page');
-      setCurrentStep('results');
-      
+      console.log('Quiz results saved successfully');
+      setSaveStatus('success');
+
     } catch (error) {
       console.error('Error saving quiz results:', error);
+      setSaveStatus('failed');
+      // Show a non-blocking notification about the save failure
       toast({
-        title: 'Error',
-        description: 'Failed to save quiz results. Please try again.',
-        variant: 'destructive',
+        title: 'Note',
+        description: 'Your results are ready to view! (Save to database failed, but this doesn\'t affect your results)',
+        variant: 'default',
       });
     }
   };
@@ -144,9 +154,10 @@ export default function QuizContainer() {
 
   const handleRestart = () => {
     setEmail('');
-    setSelectedTraits([]);
+    setQuizResponses([]);
     setAnimalResult(null);
     setCohortId('');
+    setSaveStatus('pending');
     setCurrentStep('welcome');
   };
 
@@ -202,10 +213,10 @@ export default function QuizContainer() {
       {currentStep !== 'welcome' && (
         <div className="mb-10">
           <div className="flex justify-between mb-2 relative">
-            {['traits', 'results', 'thank-you'].map((step, index) => {
+            {['questions', 'results', 'thank-you'].map((step, index) => {
               const isActive = currentStep === step;
-              const isPast = 
-                (step === 'traits' && ['results', 'thank-you'].includes(currentStep)) ||
+              const isPast =
+                (step === 'questions' && ['results', 'thank-you'].includes(currentStep)) ||
                 (step === 'results' && currentStep === 'thank-you');
                 
               return (
@@ -256,16 +267,17 @@ export default function QuizContainer() {
             {currentStep === 'welcome' && (
               <WelcomeStep onStart={handleWelcomeStart} />
             )}
-            {currentStep === 'traits' && (
-              <TraitsStep onSubmit={handleTraitsSubmit} initialTraits={selectedTraits} />
+            {currentStep === 'questions' && (
+              <QuestionStep onSubmit={handleQuestionsSubmit} initialResponses={quizResponses} />
             )}
             {currentStep === 'results' && animalResult && (
-              <ResultsStep 
-                animalType={animalResult} 
-                selectedTraits={selectedTraits} 
+              <ResultsStep
+                animalType={animalResult}
+                selectedTraits={responsesToTraits(quizResponses)}
                 onSubmit={handleResultsSubmit}
                 cohortId={cohortId}
                 sessionId={sessionId}
+                quizResponses={quizResponses}
               />
             )}
             {currentStep === 'thank-you' && (
