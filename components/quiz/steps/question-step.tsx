@@ -125,7 +125,7 @@ export default function QuestionStep({ onSubmit, initialResponses = [] }: Questi
           const optionLabel = String.fromCharCode(65 + index); // A, B, C, D
 
           return (
-            <div className="flex items-center gap-4 w-full">
+            <div key={`${currentQuestion.id}-${index}`} className="flex items-center gap-4 w-full">
               {/* Help Icon - Positioned on the Left */}
               <div className="flex-shrink-0 flex items-center justify-center w-12">
                 <TraitTooltip trait={option} />
@@ -133,7 +133,6 @@ export default function QuestionStep({ onSubmit, initialResponses = [] }: Questi
 
               {/* Main Option Button */}
               <motion.div
-                key={`${currentQuestion.id}-${index}`}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{
                   opacity: 1,

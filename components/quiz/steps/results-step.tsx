@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { motion } from 'framer-motion';
-import { AnimalType, animalArchetypes, getBlendedResults, QuizResponse } from '@/lib/quiz-data';
+import { AnimalType, animalArchetypes, getBlendedResults, getBlendedResultsFromResponses, QuizResponse } from '@/lib/quiz-data';
 import { Mail, ArrowRight, CheckCircle, Star, Users, Lightbulb, Target, Zap, Heart, AlertTriangle, TrendingUp, Shield, Brain, UserPlus, UserX, Crown, BarChart3, Users2, Percent, X, Camera } from 'lucide-react';
 import PercentageBreakdown from '../percentage-breakdown';
 import QuizTakerCounter from '../quiz-taker-counter';
@@ -27,7 +27,7 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
 
   // Calculate percentage breakdown from quiz responses or selected traits
   const percentageBreakdown = quizResponses
-    ? getBlendedResults(quizResponses.map(r => r.selectedOption))
+    ? getBlendedResultsFromResponses(quizResponses)
     : getBlendedResults(selectedTraits);
 
   // Determine the actual primary animal from percentage breakdown (highest percentage)

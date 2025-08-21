@@ -296,6 +296,15 @@ export interface QuizResponse {
   optionIndex: number; // 0=A, 1=B, 2=C, 3=D
 }
 
+// Mapping of each quiz option to the animal it represents
+// Based on the Bird Style Survey: A=Dove, B=Owl, C=Peacock, D=Eagle(Shark)
+const optionToAnimalMapping: Record<number, AnimalType> = {
+  0: 'dove',     // Option A
+  1: 'owl',      // Option B
+  2: 'peacock',  // Option C
+  3: 'shark'     // Option D (Eagle maps to Shark in our system)
+}
+
 export function determineAnimalType(selectedTraits: string[]): AnimalType {
   const scores: Record<AnimalType, number> = {
     dove: 0,
@@ -325,11 +334,25 @@ export function determineAnimalType(selectedTraits: string[]): AnimalType {
 
 // New function to determine animal type from quiz responses
 export function determineAnimalTypeFromResponses(responses: QuizResponse[]): AnimalType {
-  // Extract selected traits from responses
-  const selectedTraits = responses.map(response => response.selectedOption);
+  const scores: Record<AnimalType, number> = {
+    dove: 0,
+    owl: 0,
+    peacock: 0,
+    shark: 0
+  };
 
-  // Use the existing scoring logic
-  return determineAnimalType(selectedTraits);
+  // Count votes for each animal based on option indices
+  responses.forEach(response => {
+    const animal = optionToAnimalMapping[response.optionIndex];
+    if (animal) {
+      scores[animal]++;
+    }
+  });
+
+  // Find the animal with the highest score
+  return Object.entries(scores).reduce((a, b) =>
+    scores[a[0] as AnimalType] > scores[b[0] as AnimalType] ? a : b
+  )[0] as AnimalType;
 }
 
 // Helper function to convert responses to traits array (for backward compatibility)
@@ -375,6 +398,31 @@ export function getBlendedResults(selectedTraits: string[]): Record<AnimalType, 
 
 // Function to get blended results from quiz responses
 export function getBlendedResultsFromResponses(responses: QuizResponse[]): Record<AnimalType, number> {
-  const selectedTraits = responses.map(response => response.selectedOption);
-  return getBlendedResults(selectedTraits);
+  const scores: Record<AnimalType, number> = {
+    dove: 0,
+    owl: 0,
+    peacock: 0,
+    shark: 0
+  };
+
+  // Count votes for each animal based on option indices
+  responses.forEach(response => {
+    const animal = optionToAnimalMapping[response.optionIndex];
+    if (animal) {
+      scores[animal]++;
+    }
+  });
+
+  // Calculate total responses
+  const totalResponses = responses.length || 1; // Avoid division by zero
+
+  // Convert to percentages
+  const percentages: Record<AnimalType, number> = {
+    dove: Math.round((scores.dove / totalResponses) * 100),
+    owl: Math.round((scores.owl / totalResponses) * 100),
+    peacock: Math.round((scores.peacock / totalResponses) * 100),
+    shark: Math.round((scores.shark / totalResponses) * 100)
+  };
+
+  return percentages;
 }

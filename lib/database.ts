@@ -4,9 +4,25 @@ let pool: Pool | null = null;
 
 export function getPool(): Pool {
   if (!pool) {
+    const connectionString = process.env.CONNECTION_STRING_DIRECT || process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    
+    // If no connection string is provided, throw a meaningful error
+    if (!connectionString) {
+      throw new Error('Database connection not configured. Please set CONNECTION_STRING_DIRECT, DATABASE_URL, or POSTGRES_URL environment variable.');
+    }
+    
+    // Check if we should use SSL based on the connection string
+    const shouldUseSSL = connectionString && (
+      connectionString.includes('sslmode=require') || 
+      connectionString.includes('ssl=true') ||
+      connectionString.includes('amazonaws.com') ||
+      connectionString.includes('supabase.co') ||
+      connectionString.includes('neon.tech')
+    );
+    
     pool = new Pool({
-      connectionString: process.env.CONNECTION_STRING_DIRECT || process.env.DATABASE_URL || process.env.POSTGRES_URL,
-      ssl: { rejectUnauthorized: false },
+      connectionString,
+      ssl: shouldUseSSL ? { rejectUnauthorized: false } : false,
     });
   }
   return pool;
