@@ -1,8 +1,5 @@
 import * as brevo from '@getbrevo/brevo';
 
-const apiInstance = new brevo.TransactionalEmailsApi();
-apiInstance.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY || '');
-
 export async function sendQuizResults(
   email: string,
   animalType: string,
@@ -10,6 +7,17 @@ export async function sendQuizResults(
   selectedTraits: string[],
   cohortId?: string
 ) {
+  // Initialize API instance inside the function to ensure env vars are loaded
+  const apiInstance = new brevo.TransactionalEmailsApi();
+  const apiKey = process.env.BREVO_API_KEY;
+  
+  if (!apiKey) {
+    console.error('BREVO_API_KEY is not configured');
+    throw new Error('Email service is not configured');
+  }
+  
+  apiInstance.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, apiKey);
+  
   const sendSmtpEmail = new brevo.SendSmtpEmail();
   
   sendSmtpEmail.subject = `🎉 Your Animal Personality Quiz Results: ${animalData.title}`;

@@ -43,15 +43,21 @@ export async function POST(request: NextRequest) {
       const selectedTraits = quizResult.selected_traits;
       
       // Send actual email with results
-      await sendQuizResults(
-        email,
-        quizResult.animal_type,
-        animalData,
-        selectedTraits,
-        quizResult.cohort_id
-      );
-
-      console.log('Email sent successfully to:', email);
+      try {
+        await sendQuizResults(
+          email,
+          quizResult.animal_type,
+          animalData,
+          selectedTraits,
+          quizResult.cohort_id
+        );
+        
+        console.log('Email sent successfully to:', email);
+      } catch (emailError) {
+        console.error('Failed to send email:', emailError);
+        // Log but don't fail the entire request if email fails
+        // The quiz result is already saved with email
+      }
     }
 
     return NextResponse.json({
@@ -62,8 +68,12 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error processing email submission:', error);
+    
+    // Provide more detailed error messages for debugging
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
