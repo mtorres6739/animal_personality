@@ -471,7 +471,7 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
               <Percent className="h-6 w-6 text-blue-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-blue-700">
                 {cohortData.distributions && cohortData.distributions.length > 0
-                  ? (cohortData.distributions.find((d: any) => d.animal === primaryAnimalType)?.percentage || 0)
+                  ? (cohortData.distributions.find((d: any) => d.animal === animalType)?.percentage || 0)
                   : 100}%
               </div>
               <div className="text-sm text-blue-600">Share Your Type</div>
