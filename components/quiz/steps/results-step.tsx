@@ -30,12 +30,9 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
     ? getBlendedResultsFromResponses(quizResponses)
     : getBlendedResults(selectedTraits);
 
-  // Determine the actual primary animal from percentage breakdown (highest percentage)
-  const primaryAnimalType = (Object.entries(percentageBreakdown) as [AnimalType, number][])
-    .sort(([, a], [, b]) => b - a)[0][0];
-
-  // Use the primary animal from percentage breakdown for consistency
-  const animal = animalArchetypes[primaryAnimalType];
+  // Use the animalType prop directly - it's already been determined by the scoring algorithm
+  // No need to recalculate from percentages, which could cause inconsistency
+  const animal = animalArchetypes[animalType];
 
   // Fetch real cohort data from API
   const [cohortData, setCohortData] = useState<any>(null);
