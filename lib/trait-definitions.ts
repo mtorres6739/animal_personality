@@ -777,6 +777,87 @@ export const traitDefinitions: Record<string, TraitDefinition> = {
       'Creating comprehensive plans with many components'
     ],
     relatedTo: ['Thorough', 'Meticulous', 'Detailed']
+  },
+  // Additional traits from rewritten quiz questions
+  'Bold': {
+    name: 'Bold',
+    definition: 'Willing to take risks and face danger or uncertainty with confidence.',
+    examples: [
+      'Taking initiative in challenging situations',
+      'Making courageous decisions without hesitation',
+      'Standing out and being unafraid of attention'
+    ],
+    relatedTo: ['Risk taker', 'Assertive', 'Confident']
+  },
+  'Decisive': {
+    name: 'Decisive',
+    definition: 'Able to make decisions quickly and effectively, settling issues with determination.',
+    examples: [
+      'Making firm choices without excessive deliberation',
+      'Committing to a course of action confidently',
+      'Resolving problems swiftly and clearly'
+    ],
+    relatedTo: ['Strong willed', 'Determined', 'Confident']
+  },
+  'Direct': {
+    name: 'Direct',
+    definition: 'Straightforward in communication and action; saying exactly what you mean.',
+    examples: [
+      'Speaking plainly without sugar-coating',
+      'Getting straight to the point in conversations',
+      'Being honest and clear about expectations'
+    ],
+    relatedTo: ['Assertive', 'Forward', 'Honest']
+  },
+  'Dominant': {
+    name: 'Dominant',
+    definition: 'Having a commanding influence; tending to lead and control situations.',
+    examples: [
+      'Taking charge naturally in group settings',
+      'Making executive decisions confidently',
+      'Influencing the direction of projects and teams'
+    ],
+    relatedTo: ['Assertive', 'Powerful', 'Strong willed']
+  },
+  'Creative': {
+    name: 'Creative',
+    definition: 'Using imagination and original ideas to create something or solve problems.',
+    examples: [
+      'Thinking outside the box for solutions',
+      'Generating new and innovative approaches',
+      'Expressing yourself through artistic or novel means'
+    ],
+    relatedTo: ['Innovative', 'Imaginative', 'Original']
+  },
+  'Friendly': {
+    name: 'Friendly',
+    definition: 'Kind and pleasant in manner; enjoying and facilitating positive social interactions.',
+    examples: [
+      'Greeting others warmly and with genuine interest',
+      'Creating welcoming environments for people',
+      'Building rapport easily with new acquaintances'
+    ],
+    relatedTo: ['Social', 'Warm', 'Approachable']
+  },
+  'Loyal': {
+    name: 'Loyal',
+    definition: 'Showing firm and constant support or allegiance to people, causes, or organizations.',
+    examples: [
+      'Standing by friends and colleagues through difficulties',
+      'Maintaining commitments even when challenging',
+      'Defending those you care about consistently'
+    ],
+    relatedTo: ['Dependable', 'Faithful', 'Devoted']
+  },
+  'Showy': {
+    name: 'Showy',
+    definition: 'Attracting attention through striking appearance or behavior; demonstrative.',
+    examples: [
+      'Expressing yourself in eye-catching ways',
+      'Enjoying being noticed and standing out',
+      'Making a memorable impression on others'
+    ],
+    relatedTo: ['Attention-seeking', 'Dramatic', 'Expressive']
   }
 };
 
