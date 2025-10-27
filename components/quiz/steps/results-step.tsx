@@ -482,7 +482,7 @@ export default function ResultsStep({ animalType, selectedTraits, onSubmit, coho
             <h4 className="font-medium text-blue-700 mb-3">Group Distribution:</h4>
             {cohortData.distributions && cohortData.distributions.length > 0 ? cohortData.distributions.map((dist: any, index: number) => {
               const animalData = animalArchetypes[dist.animal as AnimalType];
-              const isUserType = dist.animal === primaryAnimalType;
+              const isUserType = dist.animal === animalType;
               
               return (
                 <motion.div
